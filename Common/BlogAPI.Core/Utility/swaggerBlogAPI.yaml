@@ -1,0 +1,184 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: 'Blog API'
+host: 'localhost:5000'
+basePath: '/api/v1.0/blogsite'
+schemes:
+  - 'http'
+paths:
+  /user/register:
+    post:
+      summary: 'Register a new user'
+      consumes:
+        - 'application/json'
+      parameters:
+        - in: 'body'
+          name: 'user'
+          description: 'User to register'
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '200':
+          description: 'User registered successfully'
+        '400':
+          description: 'Invalid user data'
+        '500':
+          description: 'Server error'
+  /blogs/info/{category}:
+    get:
+      summary: 'Get blogs by category'
+      parameters:
+        - in: 'path'
+          name: 'category'
+          type: 'string'
+          required: true
+          description: 'Category of blogs'
+      responses:
+        '200':
+          description: 'Blogs found'
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/Blog'
+        '400':
+          description: 'Invalid category'
+        '500':
+          description: 'Server error'
+  /user/getall:
+    get:
+      summary: 'Get all blogs of a user'
+      parameters:
+        - in: 'header'
+          name: 'userId'
+          type: 'string'
+          required: true
+          description: 'User ID'
+      responses:
+        '200':
+          description: 'Blogs found'
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/Blog'
+        '400':
+          description: 'Invalid user ID'
+        '500':
+          description: 'Server error'
+  /user/delete/{blogname}:
+    delete:
+      summary: 'Delete a blog'
+      parameters:
+        - in: 'header'
+          name: 'userId'
+          type: 'string'
+          required: true
+          description: 'User ID'
+        - in: 'path'
+          name: 'blogname'
+          type: 'string'
+          required: true
+          description: 'Blog name'
+      responses:
+        '200':
+          description: 'Blog deleted'
+        '400':
+          description: 'Invalid user ID or blog name'
+        '404':
+          description: 'Blog not found'
+        '500':
+          description: 'Server error'
+  /user/blogs/add/{blogname}:
+    post:
+      summary: 'Add a new blog'
+      consumes:
+        - 'application/json'
+      parameters:
+        - in: 'header'
+          name: 'userId'
+          type: 'string'
+          required: true
+          description: 'User ID'
+        - in: 'path'
+          name: 'blogname'
+          type: 'string'
+          required: true
+          description: 'Blog name'
+        - in: 'body'
+          name: 'blog'
+          description: 'Blog to add'
+          schema:
+            $ref: '#/definitions/Blog'
+      responses:
+        '200':
+          description: 'Blog added'
+          schema:
+            $ref: '#/definitions/Blog'
+        '400':
+          description: 'Invalid blog data'
+        '500':
+          description: 'Server error'
+  /blogs/get/{category}/{durationFromRange}/{durationToRange}:
+    get:
+      summary: 'Get blogs by duration'
+      parameters:
+        - in: 'path'
+          name: 'category'
+          type: 'string'
+          required: true
+          description: 'Category of blogs'
+        - in: 'path'
+          name: 'durationFromRange'
+          type: 'string'
+          format: 'date-time'
+          required: true
+          description: 'Start date of duration range'
+        - in: 'path'
+          name: 'durationToRange'
+          type: 'string'
+          format: 'date-time'
+          required: true
+          description: 'End date of duration range'
+      responses:
+        '200':
+          description: 'Blogs found'
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/Blog'
+        '400':
+          description: 'Invalid category or duration range'
+        '404':
+          description: 'No blogs found'
+        '500':
+          description: 'Server error'
+definitions:
+  User:
+    type: 'object'
+    properties:
+      _id:
+        type: 'string'
+      UserName:
+        type: 'string'
+      Email:
+        type: 'string'
+      Password:
+        type: 'string'
+  Blog:
+    type: 'object'
+    properties:
+      _id:
+        type: 'string'
+      UserId:
+        type: 'string'
+      BlogName:
+        type: 'string'
+      Category:
+        type: 'string'
+      Article:
+        type: 'string'
+      AuthorName:
+        type: 'string'
+      Timestamp:
+        type: 'string'
+        format: 'date-time'
