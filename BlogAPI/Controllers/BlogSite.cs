@@ -48,7 +48,6 @@ public class BlogSite : Controller
             _logger.LogError("Operation failed, Error: {ex}", ex);
             return StatusCode(500);
         }
-        
     }
 
     [HttpGet("blogs/info/{category}")]
