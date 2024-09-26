@@ -75,3 +75,47 @@ Use Manager Secrets to add secrets like
             "Database": "BlogAPIs"
         }
     }
+
+
+
+private void CheckForDuplicates(CutoffTimeItem toBeMadeFinalised)
+ 
+C#
+if (CutoffTimesCollection.Collection.Count(Item => 
+Helper.IsCodeTableSame(Item.Desk.Value, toBeMadeFinalised.Desk.Value) &&
+...
+) > 0)
+
+The code checks for duplicates based on multiple properties:
+ 
+Plain Text
+Desk
+SelectedDepot
+SelectedBorrower
+AssetTypeDetail
+AssetType
+SelectedCollateralType
+Exclusive
+CollateralCurrency
+SettlementDate
+PrepayDate
+CutoffDate
+CutoffTime
+CutOffTimeZone
+ID
+ 
+If a duplicate is found:
+ 
+C#
+toBeMadeFinalised.IsValid = false;
+toBeMadeFinalised.ErrorMessage = !string.IsNullOrEmpty(toBeMadeFinalised.ErrorMessage) ? 
+   string.Concat(toBeMadeFinalised.ErrorMessage, Environment.NewLine.ToString(), PopupMessage.DUPLICATE_USERGROUP_ROW_MESSAGE) : 
+   PopupMessage.DUPLICATE_USERGROUP_ROW_MESSAGE;
+ 
+If no duplicate is found:
+ 
+C#
+toBeMadeFinalised.IsValid = true;
+ 
+Summary
+The method ensures that the toBeMadeFinalised item is unique within the CutoffTimesCollection. If a duplicate is found based on the specified criteria, the item is marked as invalid and an appropriate error message is set.
